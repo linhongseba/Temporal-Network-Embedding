@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
-#include"./main/function.h"
-#include"./main/IOfunction.h"
+#include"../main/function.h"
+#include"../main/IOfunction.h"
 //#include <crtdbg.h>
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -214,9 +214,11 @@ int main(int argc, char*argv[]){
 		delete[]outfile;
 	}
 	newlink.clear();
-	newlink.shrink_to_fit();
+	//comment out C++11 function
+	//newlink.shrink_to_fit();
 	dellink.clear();
-	dellink.shrink_to_fit();
+	//comment out c++11 function
+	//dellink.shrink_to_fit();
 	delete[]outfile1;
 	delete[]outfile2;
 	delete[]outfile3;

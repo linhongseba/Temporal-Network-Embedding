@@ -4,7 +4,7 @@
 /*
 transfer edge list format to standard weighted format
 Input:
-uid \t vid\t weight and uid starts from 1
+uid \t vid\t weight and uid starts from 0
 Output:
 Standard weighted format
 
@@ -25,7 +25,7 @@ inline int binarysearch(int *&source1, int length1, int v){
 		return -(low+1);
 }
 
-inline bool insert(int *&Gu, int *&Wedge, int v, int value){
+inline bool insert(int *&Gu, double *&Wedge, int v, double value){
 	int maxlength=Gu[0];
 	int deg=Gu[1];
 	if(deg==0){
@@ -36,7 +36,7 @@ inline bool insert(int *&Gu, int *&Wedge, int v, int value){
 	}else{
 		if(deg>=maxlength-2){
 		Gu=(int *)realloc(Gu,sizeof(int)*(maxlength+100));
-		Wedge=(int*)realloc(Wedge, sizeof(int)*(maxlength + 100));
+		Wedge=(double*)realloc(Wedge, sizeof(double)*(maxlength + 100));
 		Gu[0]=maxlength+100;
 		}
 		int *temp=Gu+2;
@@ -78,32 +78,34 @@ int main(int argc, char *argv[]){
 	//fscanf(rfile,"#%s%s\n",str1,str2);
 	//fscanf(rfile,"%d",&nodenum);
 	int u,v;
-	int w;
+	double w;
 	int **G=(int **)malloc(sizeof(int *)*nodenum);
-	int **Wedge = (int**)malloc(sizeof(int *)*nodenum);
+	double **Wedge = (double**)malloc(sizeof(double *)*nodenum);
 	for (int i = 0; i < nodenum; i++){
-		G[i] = (int*)malloc(sizeof(int) * 20);
-		Wedge[i] = (int*)malloc(sizeof(int) * 20);
+		G[i] = (int*)malloc(sizeof(int) * 6);
+		Wedge[i] = (double*)malloc(sizeof(double) * 6);
 	}
 	int arcnum=0;
 	for(int i=0;i<nodenum;i++){
-		G[i][0]=19;
+		G[i][0]=6;
 		G[i][1]=0;
-		Wedge[i][0] = 19;
-		Wedge[i][1] = 0;
 	}
 	int i=0;
 	while(!feof(rfile)){
-		fscanf(rfile,"%d%d%d",&u,&v,&w);
+		fscanf(rfile,"%d%d%lf",&u,&v,&w);
+		if(u>nodenum||v>nodenum){
+			printf("error\n");
+			exit(2);
+	    }
 		if(u==v)
 			continue;
-		//bool flag1=insert(G[u],Wedge[u],v,w);
-		//bool flag2=insert(G[v],Wedge[v],u,w);
-		//if(flag1==true&&flag2==true)
-			//arcnum++;
-		bool flag1=insert(G[u],v);
-		if(flag1==true)
+		bool flag1=insert(G[u],Wedge[u],v,w);
+		bool flag2=insert(G[v],Wedge[v],u,w);
+		if(flag1==true&&flag2==true)
 			arcnum++;
+		//bool flag1=insert(G[u],v);
+		//if(flag1==true)
+			//arcnum++;
 		if(i%1000==0){
 			printf("now it is in edge %d\n",i);
 		}
@@ -120,7 +122,7 @@ int main(int argc, char *argv[]){
 	for(int i=0;i<nodenum;i++){
 		fprintf(wfile,"%d,%d",i,G[i][1]);
 		for(int j=0;j<G[i][1];j++){
-			fprintf(wfile,":%d,%d",G[i][j+2],Wedge[i][j+2]);
+			fprintf(wfile,":%d,%lf",G[i][j+2],Wedge[i][j+2]);
 		}
 		fprintf(wfile,"\n");
 	}

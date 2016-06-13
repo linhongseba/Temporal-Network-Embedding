@@ -1,4 +1,4 @@
-#include"SparseMatrix.h"
+#include"../main/SparseMatrix.h"
 #include"Evaluate.h"
 /*
 Error.cpp:

@@ -1,7 +1,7 @@
-#include"function.h"
+#include"../main/function.h"
 #include"Evaluate.h"
-#include"dirent.h"
-#include"memoryfunction.h"
+#include"../main/dirent.h"
+#include"../main/memoryfunction.h"
 #define _CRT_SECURE_NO_WARNINGS
 //#define _CRTDBG_MAP_ALLOC
 //#include <crtdbg.h>
@@ -97,13 +97,15 @@ int main(int argc, char *argv[]){
 			//release memory of allresults;
 			for (int j = 0; j < (int)cfiles.size(); j++){
 				allresults[j].clear();
-				allresults[j].shrink_to_fit();
+				//comment out because it only availables in C++11
+				//allresults[j].shrink_to_fit();
 			}
 			delete[]allresults;
 			//bfiles.clear();
 		}
 		cfiles.clear();
-		cfiles.shrink_to_fit();
+		//function only availables in C++11
+		//cfiles.shrink_to_fit();
 	}
 	else{
 		if (strcmp(bfile, " ") != 0){

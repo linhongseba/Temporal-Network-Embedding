@@ -1,10 +1,11 @@
 //#define _CRTDBG_MAP_ALLOC
 //#define _CRT_SECURE_NO_WARNINGS
-#include"./main/gradiantmethod.h"
-#include"./main/dirent.h"
-#include"./main/Evaluate.h"
-#include"./main/IncrementalBCGD.h"
-#include <crtdbg.h>
+#include"../main/gradiantmethod.h"
+#include"../main/dirent.h"
+#include"../evaluation/Evaluate.h"
+#include"../main/IncrementalBCGD.h"
+//#include <crtdbg.h> 
+//only for windows debug
 int main(int argc, char *argv[]){
 	Initmemory();
 	SparseMatrix Z;

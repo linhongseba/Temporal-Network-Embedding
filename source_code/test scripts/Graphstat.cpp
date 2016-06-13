@@ -1,4 +1,4 @@
-#include"./main/IOfunction.h"
+#include"../main/IOfunction.h"
 int main(int argc, char *argv[]){
 	srand(time(NULL));
 	Initmemory();

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
-#include"./main/function.h"
-#include"./main/IOfunction.h"
+#include"../main/function.h"
+#include"../main/IOfunction.h"
 //#include <crtdbg.h>
 //#define _CRT_SECURE_NO_WARNINGS
 int main(int argc, char*argv[]){
