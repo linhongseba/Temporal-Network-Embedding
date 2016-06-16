@@ -54,8 +54,72 @@ The implementation that infers the temporal latent spaces for a sequence of dyna
         
 ## Usage
    
+   ### Temporal NetWork Embedding Usage
+   executable file location: source_code/main/BCGDEmbed
+   
+   Usage: BCGDEmbed graphdir [option]
+   graphdir is a String
+   -t: type of algorithms default t=4
+   
+   -t:=1 global,=2 global auto, =3 local, =4 local auto, =5 incremental, =6 incremental auto
+   
+   -c: number_of_dimensions [int default 20]
+   
+   -m: memorybound (MB) [int default 1024]
+   
+   -a : alpha>0 [double default 0.00001]
+   
+   -l : lambda [double default 0.01]
+   
+   -p : prefix [string]
+   
+   -i : iteration number [int default 300]
+   
+   -e : print out step size defalt=100, print out every 100 iters
+   
+   -b : size of output buffer (>4MB), default 60MB\n"
+   
+   -z : zeta value (default sqrt(1/nodenum)
+   
+   -d : delta value (default zeta*2/k\n")
     
     
 # Input and Output
+
+## Input
+
+Input is a directory of graph files. Each graph file is formatted as follows:
+
+The first line is number of nodes, and starting from the second lins is the adjacence list of each node formated as follows:
+
+node_id,degree_d:neighboreid1,weight1:neighborid2,weight2:...neighboridd,weightd
+
+Note that the node_id is within the range [0,n-1], where n is number of nodes, and the list of neighbors are sorted in ascending order too.
+
+An example of input graph file is as follows:
+
+3
+
+0,2:1,1.0:2,1.0
+
+1,2:0,1.0:2,1.0
+
+2,2:0,1.0:1,1.0
+
+where this graph is a triangle with three vertices, and each edge is with weight 1.0.
+
+## Output
+
+Output is a directory of embedding files. Each embedding file is formatted as follows:
+
+The first line is number of nodes, and starting from the seond line is the sparse encoding of latent positions of each node:
+node_id,number_non-zero:index1,weight1:index2,weight2:...index_d,weightd
+
+Each index gives the non-zero index of each dimension, and each weight gives the non-zero position for that dimension.
+
+Note that the node_id is within the range [0,n-1], where n is number of nodes, and the indexes are sorted in ascending order too.
+
+
+
 # Example Pipeline
 
