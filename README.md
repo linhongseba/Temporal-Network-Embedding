@@ -57,8 +57,10 @@ The implementation that infers the temporal latent spaces for a sequence of dyna
    ### Temporal NetWork Embedding Usage
    executable file location: source_code/main/BCGDEmbed
    
-   Usage: BCGDEmbed graphdir [option]
+   Usage: BCGDEmbed graphdir [options]
    graphdir is a String
+   
+   Options: 
    -t: type of algorithms default t=4
    
    -t:=1 global,=2 global auto, =3 local, =4 local auto, =5 incremental, =6 incremental auto
@@ -83,7 +85,8 @@ The implementation that infers the temporal latent spaces for a sequence of dyna
    
    -d : delta value (default zeta*2/k\n")
     
-    
+   
+   
 # Input and Output
 
 ## Input
@@ -119,7 +122,24 @@ Each index gives the non-zero index of each dimension, and each weight gives the
 
 Note that the node_id is within the range [0,n-1], where n is number of nodes, and the indexes are sorted in ascending order too.
 
-
+## Format Script Usage
+   
+   To facilitate the usage of the code, we provide a set of format script that transforms different graph formats into input formats of program:
+   
+   edge2wstandard
+   Transforms the edge format into the input weighted standard format of program
+   
+   For the edge format， each line encodes an edge of graph with format:
+   
+   source_id[]target_id, it can be sepearted by either whitespace or tab
+   
+   Both the source_id and target_id is using C-index (i.e., Integer starts from 0)
+   
+   Usage: edge2wstandard [edgegraphfile] [number_of_nodes]
+   
+   
+   matlab2wstandard
+   TSV2wstandard
 
 # Example Pipeline
 
