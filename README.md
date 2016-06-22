@@ -47,7 +47,11 @@ The implementation that infers the temporal latent spaces for a sequence of dyna
 # Install
 ## Pre-configuration
         - make sure that g++ compiler is pre-installed
+        
         - if it is a Linux/Mac Machine, please copy and paste \platform_dependent\linux\Runtimecounter.h to the \main\ directory. If it is a Windows Machine, please copy and paste \platform_dependent\windows\Runtimecounter.h to the \main\ directory.
+        
+        - Enter into each directory, and open the makefile file with any Text Editor, and change the path to g++ comiler into your local machine g++ compiler path
+        
 ## Compile
         - Enter into each directory, and type make to compile the soure codes to obtain the executable files.
         - Start with test scripts is a good option to make sure everything is well configured.
@@ -139,7 +143,27 @@ Note that the node_id is within the range [0,n-1], where n is number of nodes, a
    
    
    matlab2wstandard
+   
+   Transforms the matlab format into the input weighted standard format of program
+   
+   For the matlab format， each line encodes an edge of graph with format:
+   
+   source_id[]target_id[]value, it can be sepearted by either whitespace or tab
+   
+   Both the source_id and target_id is using matlab-index (i.e., Integer starts from 1)
+   
+   Usage: matlab2wstandard [edgegraphfile] [number_of_nodes]
+   
    TSV2wstandard
+   
+   Transforms the TSV format into the input weighted standard format of program
+   
+   For the TSV format， each line encodes an edge of graph with format:
+   
+   source_id[]target_id[]value, it can be sepearted by either whitespace or tab
+   
+   Both the source_id and target_id is using C-index (i.e., Integer starts from 0)
 
 # Example Pipeline
+
 
