@@ -58,7 +58,8 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 	//Random Initialize the Zmatrix for time 0 (	START)
 	//==============================================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	InitZ(m, true, filenames.at(0), cfilename, membound);
     releaseInitZmemory();
 	cout << "finish initialization" << endl;
@@ -95,11 +96,13 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 		//===============================================
 		if (t > 0){
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+			itostring(t - 1, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		else{
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		rfile3 = fopen(cprefilename, "r");
 		rv = fscanf(rfile3, "%d\n", &nodenum);
@@ -116,7 +119,8 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 			//=========OPEN Z matrix file to write (START)
 			//===============================================
 			strcpy(cfilename, s.c_str());
-			strcat(cfilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cfilename, tempstr);
 			wfile = fopen(cfilename, "w");
 			if (wfile == NULL){
 				printf("could not write result to disk\n");
@@ -279,7 +283,8 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 	//Random Initialize the Zmatrix for time 0 (	START)
 	//==============================================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	InitZ(m, true, filenames.at(0), cfilename, membound);
     releaseInitZmemory();
 	cout << "finish initialization" << endl;
@@ -318,7 +323,8 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 		//===============================================
 		if (t > 0){
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+			itostring(t - 1, tempstr, 10);
+			strcat(cprefilename, tempstr);
 			rfile3 = fopen(cprefilename, "r");
 			rv = fscanf(rfile3, "%d\n", &nodenum);
 			if (rv != 1){
@@ -347,7 +353,8 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 			//=========OPEN Z matrix file to read (START)
 			//===============================================
 			strcpy(cfilename, s.c_str());
-			strcat(cfilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cfilename, tempstr);
 			if (iter > 0 || t == 0){
 				rfile2 = fopen(cfilename, "r");
 				rv = fscanf(rfile2, "%d\n", &nodenum);
@@ -529,7 +536,8 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 	//Random Initialize the Zmatrix for time 0 (	START)
 	//==============================================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	InitZfull(m, true, filenames.at(0), cfilename);
     releaseInitZmemory();
 	cout << "finish initialization" << endl;
@@ -574,11 +582,13 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		//===============================================
 		if (t > 0){
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+			itostring(t - 1, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		else{
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		rfile3 = fopen(cprefilename, "r");
 		if (rfile3 == NULL){
@@ -600,7 +610,8 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		//=========OPEN Z matrix file to write (START)
 		//===============================================
 		strcpy(cfilename, s.c_str());
-		strcat(cfilename, _itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(cfilename, tempstr);
 		wfile = fopen(cfilename, "w");
 		if (wfile == NULL){
 			printf("could not open matrix file %s to write", cfilename);
@@ -752,7 +763,8 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 	//==============================================================
 	for (t = 0; t<(int)filenames.size(); t++){
 		strcpy(cfilename, s.c_str());
-		strcat(cfilename, _itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(cfilename, tempstr);
 		InitZ(m, true, filenames.at(t), cfilename, membound);
 	}
     releaseInitZmemory();
@@ -793,7 +805,8 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 			}
 			fprintf(wfile, "%d\n", nodenum);
 			strcpy(cfilename, s.c_str());
-			strcat(cfilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cfilename, tempstr);
 			rfile2 = fopen(cfilename, "r");
 			if (rfile2 == NULL){
 				printf("could not open file %s to read\n", cfilename);
@@ -837,7 +850,8 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 				}
 				else{
 					strcpy(cprefilename, s.c_str());
-					strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+					itostring(t - 1, tempstr, 10);
+					strcat(cprefilename, tempstr);
 					rfile3 = fopen(cprefilename, "r");
 					if (rfile3 == NULL){
 						printf("could not open %s file to read\n", cprefilename);
@@ -856,7 +870,8 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 				}
 				else{
 					strcpy(cnextfilename, s.c_str());
-					strcat(cnextfilename, _itoa(t + 1, tempstr, 10));
+					itostring(t + 1, tempstr, 10);
+					strcat(cnextfilename, tempstr);
 					rfile4 = fopen(cnextfilename, "r");
 					if (rfile4 == NULL){
 						printf("could not open %s file to read\n", cnextfilename);
@@ -1004,7 +1019,8 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 	//==============================================================
 	for (t = 0; t<(int)filenames.size(); t++){
 		strcpy(cfilename, s.c_str());
-		strcat(cfilename, _itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(cfilename, tempstr);
 		InitZfull(m, true, filenames.at(t), cfilename);
 	}
     releaseInitZmemory();
@@ -1051,19 +1067,23 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 			//===============================================
 			if (t > 0){
 				strcpy(cprefilename, s.c_str());
-				strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+				itostring(t - 1, tempstr, 10);
+				strcat(cprefilename, tempstr);
 			}
 			else{
 				strcpy(cprefilename, s.c_str());
-				strcat(cprefilename, _itoa(t, tempstr, 10));
+				itostring(t, tempstr, 10);
+				strcat(cprefilename, tempstr);
 			}
 			if (t == filenames.size() - 1){
 				strcpy(cnextfilename, s.c_str());
-				strcat(cnextfilename, _itoa(t, tempstr, 10));
+				itostring(t, tempstr, 10);
+				strcat(cnextfilename, tempstr);
 			}
 			else{
 				strcpy(cnextfilename, s.c_str());
-				strcat(cnextfilename, _itoa(t+1, tempstr, 10));
+				itostring(t+1, tempstr, 10);
+				strcat(cnextfilename, tempstr);
 			}
 			rfile3 = fopen(cprefilename, "r");
 			rv = fscanf(rfile3, "%d\n", &nodenum);
@@ -1089,7 +1109,8 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 			//load community matrix Z into memory (start)
 			//===============================================
 			strcpy(cfilename, s.c_str());
-			strcat(cfilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cfilename, tempstr);
 			rfile2 = fopen(cfilename, "r");
 			rv = fscanf(rfile2, "%d\n", &nodenum);
 			if (rv != 1){

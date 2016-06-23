@@ -155,7 +155,8 @@ void IncrementalBCGDfull(int m, vector<char *> &filenames, double lambda, string
 	//Random Initialize the Zmatrix for time 0 (	START)
 	//==============================================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	InitZfull(m, true, filenames.at(0), cfilename);
     releaseInitZmemory();
 	cout << "finish initialization" << endl;
@@ -203,11 +204,13 @@ void IncrementalBCGDfull(int m, vector<char *> &filenames, double lambda, string
 		//===============================================
 		if (t == 0){
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t, tempstr, 10));
+			itostring(t, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		else{
 			strcpy(cprefilename, s.c_str());
-			strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+			itostring(t - 1, tempstr, 10);
+			strcat(cprefilename, tempstr);
 		}
 		rfile3 = fopen(cprefilename, "r");
 		if (rfile3 == NULL){
@@ -229,7 +232,8 @@ void IncrementalBCGDfull(int m, vector<char *> &filenames, double lambda, string
 		//=========OPEN Z matrix file to write (START)
 		//===============================================
 		strcpy(cfilename, s.c_str());
-		strcat(cfilename, _itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(cfilename, tempstr);
 		wfile = fopen(cfilename, "w");
 		if (wfile == NULL){
 			printf("could not open matrix file %s to write", cfilename);
@@ -246,7 +250,8 @@ void IncrementalBCGDfull(int m, vector<char *> &filenames, double lambda, string
 		/* tempstring = ssize + std::to_string(t);
 		wfile2 = fopen(tempstring.c_str(), "w"); */
 		strcpy(ssizefile,ssize.c_str());
-		strcat(ssizefile,_itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(ssizefile,tempstr);
 		wfile2=fopen(ssizefile,"w");
 		if (wfile2 == NULL){
 			printf("could not open file to write\n");
@@ -262,7 +267,8 @@ void IncrementalBCGDfull(int m, vector<char *> &filenames, double lambda, string
 		/* tempstring = sprob + std::to_string(t);
 		wfile3 = fopen(tempstring.c_str(), "w"); */
 		strcpy(spfile,sprob.c_str());
-		strcat(spfile,_itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(spfile,tempstr);
 		wfile3=fopen(spfile,"w");
 		if (wfile3 == NULL){
 			printf("could not open file to write\n");
@@ -529,7 +535,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 	//Random Initialize the Zmatrix for time 0 (	START)
 	//==============================================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	InitZ(m, true, filenames.at(0), cfilename, membound);
     releaseInitZmemory();
 	cout << "finish initialization" << endl;
@@ -567,7 +574,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 	//=========OPEN Z matrix file to read (START)
 	//===============================================
 	strcpy(cfilename, s.c_str());
-	strcat(cfilename, _itoa(0, tempstr, 10));
+	itostring(0, tempstr, 10);
+	strcat(cfilename, tempstr);
 	rfile2 = fopen(cfilename, "r");
 	rv = fscanf(rfile2, "%d\n", &nodenum);
 	if (rv != 1){
@@ -713,7 +721,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 		//=========OPEN Z matrix pre file to read (START)
 		//===============================================
 		strcpy(cprefilename, s.c_str());
-		strcat(cprefilename, _itoa(t - 1, tempstr, 10));
+		itostring(t - 1, tempstr, 10);
+		strcat(cprefilename, tempstr);
 		rfile3 = fopen(cprefilename, "r");
 		if (rfile3 == NULL){
 			printf("Could not find the community file\n");
@@ -734,7 +743,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 		/* tempstring = ssize + std::to_string(t);
 		wfile2 = fopen(tempstring.c_str(), "w"); */
 		strcpy(ssizefile,ssize.c_str());
-		strcat(ssizefile,_itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(ssizefile,tempstr);
 		wfile2=fopen(ssizefile,"w");
 		if (wfile2 == NULL){
 			printf("could not open file to write\n");
@@ -750,7 +760,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 		/* tempstring = sprob + std::to_string(t);
 		wfile3 = fopen(tempstring.c_str(), "w"); */
 		strcpy(spfile,sprob.c_str());
-		strcat(spfile,_itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(spfile,tempstr);
 		wfile3=fopen(spfile,"w");
 		if (wfile3 == NULL){
 			printf("could not open file to write\n");
@@ -764,7 +775,8 @@ void IncrementalBCGDsparse(int m, vector<char *> &filenames, double lambda, doub
 		//==========Open Zmatrix file to write (START)
 		//================================================
 		strcpy(cfilename, s.c_str());
-		strcat(cfilename, _itoa(t, tempstr, 10));
+		itostring(t, tempstr, 10);
+		strcat(cfilename, tempstr);
 		wfile = fopen(cfilename, "w");
 		if (wfile == NULL){
 			printf("could not open file to write\n");

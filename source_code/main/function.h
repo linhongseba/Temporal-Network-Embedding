@@ -340,8 +340,7 @@ inline int itostring(int value, char *& string, int radix){
 		*sp++ = *--tp;
 		length++;
 	}
-	//*sp++='\0';
-	//*sp = 0;
+	*sp='\0';
 	return length;
 }
 
