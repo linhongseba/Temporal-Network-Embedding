@@ -6,7 +6,7 @@
 
 #ifndef Runtimecounter_h_
 #define Runtimecounter_h_
-#include <sys/utime.h>
+#include <sys/time.h>
 #include <stdlib.h>
 
 /*struct timevalue{
