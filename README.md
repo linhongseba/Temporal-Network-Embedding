@@ -10,8 +10,9 @@ The implementation that infers the temporal latent spaces for a sequence of dyna
 
 # Publication
 
-1. Zhu, Linhong, Dong Guo, Junming Yin, Greg Ver Steeg, and Aram Galstyan. "Scalable Link Prediction in Dynamic Networks via Non-Negative Matrix Factorization." arXiv preprint arXiv:1411.3675 (2014).
-2.  
+1. Linhong Zhu, Dong Guo, Junming Yin, Greg Ver Steeg, and Aram Galstyan. "Scalable Link Prediction in Dynamic Networks via Non-Negative Matrix Factorization." arXiv preprint arXiv:1411.3675 (2014).
+2. Linhong Zhu, Dong Guo, Junming Yin, Greg Ver Steeg, and Aram Galstyan. "Scalable Temporal Latent Space Inference for Link Prediction in Dynamic Social Networks." To be appeared in TKDE (2016).
+3. Dingxiong Deng, Cyrus Shahabi, Ugur Demiryurek, Linhong Zhu, Rose Yu, Yan Liu. "Latent Space Model for Road Networks to Predict Time-Varying Traffic." To be appeared in ACM SIGKDD Conferences on Knowledge Discovery and Data Mining (SIGKDD), 2016.
 
 # Folder organization
 /source_code/
