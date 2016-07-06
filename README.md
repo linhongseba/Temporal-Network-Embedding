@@ -1,4 +1,4 @@
-# Temporal-Network-Embedding
+# Temporal-Network-Embedding (Node2Vec)
 The implementation that infers the temporal latent spaces for a sequence of dynamic graph snapshots. For more details, please read our [paper or technical report](#publication).
 # Table of Content
 - [Publication](#publication)
