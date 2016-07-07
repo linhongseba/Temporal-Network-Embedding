@@ -116,6 +116,8 @@ An example of input graph file is as follows:
 
 where this graph is a triangle with three vertices, and each edge is with weight 1.0.
 
+Another example is shown in file Infection_8.txt
+
 ## Output
 
 Output is a directory of embedding files. Each embedding file is formatted as follows:
