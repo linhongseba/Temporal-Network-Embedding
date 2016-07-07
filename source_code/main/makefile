@@ -1,4 +1,4 @@
-CC	= "C:\\MinGW\\bin\\g++"
+CC	= g++
 CPPFLAGS= -Wno-deprecated -O3 -c
 LDFLAGS	= -O3
 SOURCES	=  BCGDLink.cpp
