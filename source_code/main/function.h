@@ -9,6 +9,7 @@
 #include <math.h>
 #include <fstream>
 #include"dirent.h"
+#include <cmath>
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 /*
