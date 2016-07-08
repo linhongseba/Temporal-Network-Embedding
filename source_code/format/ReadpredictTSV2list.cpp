@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
 	outputbuffer = (char*)malloc(BYTE_TO_READ);
 	outcurpos = outputbuffer;
 	outendpos = outputbuffer + BYTE_TO_READ;
-	temp_string = new char[65];
+	temp_string = new char[4096];
 	////////////////////////////////////////////////////////////
 	///////////initializing IO memory block (END)/////////////
 	///////////////////////////////////////////////////////////
