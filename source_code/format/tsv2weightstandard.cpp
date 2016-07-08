@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
 		printf("Usage: %s [graphfilename] [nodenum]\n", argv[0]);
 		exit(1);
 	}
-	char *filename=(char*)malloc(sizeof(char)*100);
+	char *filename=(char*)malloc(sizeof(char)*4096);
 	strcpy(filename,argv[1]);
 	FILE *rfile=fopen(filename,"r");
 	if(rfile==NULL){
@@ -70,8 +70,8 @@ int main(int argc, char *argv[]){
 	}
 	int nodenum;
 	nodenum = atoi(argv[2]);
-	char *str1=(char *)malloc(sizeof(char)*500);
-	char *str2=(char *)malloc(sizeof(char)*100);
+	char *str1=(char *)malloc(sizeof(char)*4096);
+	char *str2=(char *)malloc(sizeof(char)*4096);
 	//fscanf(rfile,"%[^\n]\n",str1);
 	//fscanf(rfile,"%[^\n]\n",str1);
 	//fscanf(rfile,"#%s%d%s%d\n",str1,&nodenum,str2,&edgenum);
@@ -127,4 +127,5 @@ int main(int argc, char *argv[]){
 		fprintf(wfile,"\n");
 	}
 	printf("number of edges: %d\n",arcnum);
+	
 }
