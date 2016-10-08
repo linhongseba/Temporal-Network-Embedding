@@ -10,4 +10,4 @@ gennew:
 	g++ Gennewlink.cpp -O3 -o gennew
 
 clean:
-	rm -f $(ALL)
+	rm -f $(all)

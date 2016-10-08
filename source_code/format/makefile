@@ -30,4 +30,4 @@ wstandard2edge:
 	g++ weightstandard2edge.cpp -O3 -o wstandard2edge
 
 clean:
-	rm -f $(ALL)
+	rm -f $(all)

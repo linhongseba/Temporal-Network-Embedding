@@ -153,7 +153,6 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 			//remember where we are in memory usage (START)
 			char *precurMem2 = curMemPos;
 			int precurblk2 = curBlk;
-			char* preendMem2 = curMemEnd;
 			//remember where we are in memory usage (END)
 			gnodenum = 0;
 			memset(isseednode, 'v', sizeof(char)*nodenum);
@@ -206,7 +205,6 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 			Z.clear();
 			curMemPos = precurMem2;
 			curBlk = precurblk2;
-			curMemEnd = preendMem2;
 			if (G != NULL){
 				free(G);
 				G = NULL;
@@ -223,26 +221,48 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 			if (Vmax == nodenum - 1)
 				break;
 		}
-		fclose(rFile);
-		fclose(rfile3);
+		if (rFile != NULL) {
+			fclose(rFile);
+			rFile = NULL;
+		}
+		if (rfile3 != NULL) {
+			fclose(rfile3);
+			rfile3 = NULL;
+		}
 		if (t > 0){
 			fclose(wfile);
+			wfile = NULL;
 		}
 		else{
 			fclose(wfiletemp);
+			wfiletemp = NULL;
 			//replace Zmatrixt with temp.txt
 			Replacefile(cfilename, "temp.txt");
 		}
 	}
     releaseTempSubmemory();
-    for(i=0;i<m;i++){
-        delete[]B[i];
-        B[i]=NULL;
-    }
-    delete[]B;
-	delete[]cfilename;
-	delete[]cprefilename;
-	delete[]tempstr;
+	if (B != NULL) {
+		for(i=0;i<m;i++){
+			if (B[i] != NULL) {
+				delete[]B[i];
+				B[i] = NULL;
+			}
+		}
+		delete[]B;
+		B = NULL;
+	}
+	if (cfilename != NULL) {
+		delete[]cfilename;
+		cfilename = NULL;
+	}
+	if (cprefilename != NULL) {
+		delete[]cprefilename;
+		cprefilename = NULL;
+	}
+	if (tempstr != NULL) {
+		delete[]tempstr;
+		tempstr = NULL;
+	}
 }
 inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, double membound, string &prefix, int printstep, bool isauto, int maxnodenum){
 	int i=0;
@@ -375,7 +395,6 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 				//remember where we are in memory usage (START)
 				char *precurMem2 = curMemPos;
 				int precurblk2 = curBlk;
-				char* preendMem2 = curMemEnd;
 				//remember where we are in memory usage (END)
 				gnodenum = 0;
 				memset(isseednode, 'v', sizeof(char)*nodenum);
@@ -433,7 +452,6 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 				Z.clear();
 				curMemPos = precurMem2;
 				curBlk = precurblk2;
-				curMemEnd = preendMem2;
 				if (G != NULL){
 					free(G);
 					G = NULL;
@@ -450,10 +468,14 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 				if (Vmax == nodenum - 1)
 					break;
 			}
-			if (wfile != NULL)
+			if (wfile != NULL) {
 				fclose(wfile);
-			if (rfile2 != NULL)
+				wfile = NULL;
+			}
+			if (rfile2 != NULL) {
 				fclose(rfile2);
+				rfile2 = NULL;
+			}
 			//replace Zmatrixt with temp.txt
 			Replacefile(cfilename, "temp.txt");
 			if (iter == 0)
@@ -465,20 +487,38 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 			a1 = a2;
 			iter++;
 		} while (iter < maxiter&&epsilo>0.000000001);
-		if (rFile != NULL)
+		if (rFile != NULL) {
 			fclose(rFile);
-		if (rfile3 != NULL)
+			rFile = NULL;
+		}
+		if (rfile3 != NULL) {
 			fclose(rfile3);
+			rfile3 = NULL;
+		}
 	}
     releaseTempSubmemory();
-	delete[]cfilename;
-	delete[]cprefilename;
-	delete[]tempstr;
-    for(i=0;i<m;i++){
-        delete[]B[i];
-        B[i]=NULL;
-    }
-    delete[]B;
+	if (cfilename != NULL) {
+		delete[]cfilename;
+		cfilename = NULL;
+	}
+	if (cprefilename != NULL) {
+		delete[]cprefilename;
+		cprefilename = NULL;
+	}
+	if (tempstr != NULL) {
+		delete[]tempstr;
+		tempstr = NULL;
+	}
+	if (B != NULL) {
+		for(i=0;i<m;i++){
+			if (B[i] != NULL) {
+				delete[]B[i];
+				B[i] = NULL;
+			}
+		}
+		delete[]B;
+		B = NULL;
+	}
 }
 
 //===================================================
@@ -557,7 +597,6 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		a1 = 1;
 		char *precurMem = curMemPos;
 		int precurblk = curBlk;
-		char* preendMem = curMemEnd;
 		//============================================
 		//=====Open graph file to read (START)
 		//===========================================
@@ -572,7 +611,10 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 			exit(2);
 		}
 		ReadGraph(G, nodenum, rFile);
-		fclose(rFile);
+		if (rFile != NULL) {
+			fclose(rFile);
+			rFile = NULL;
+		}
 		//============================================
 		//=====Open graph file to read (END)
 		//===========================================
@@ -601,7 +643,10 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 			exit(2);
 		}
 		Readcommunity(Zprime, nodenum, rfile3);
-		fclose(rfile3);
+		if (rfile3 != NULL) {
+			fclose(rfile3);
+			rfile3 = NULL;
+		}
 		//=============================================
 		//=========OPEN Z matrix pre file to read (END)
 		//===============================================
@@ -653,8 +698,10 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		Vmin = 0;
 		Vmax = nodenum - 1;
 		Z.Writetofile(wfile, G);
-		if (wfile != NULL)
+		if (wfile != NULL) {
 			fclose(wfile);
+			wfile = NULL;
+		}
 		//==========================================================
 		//==============Release Used Memory  (START)================
 		//==========================================================
@@ -663,7 +710,6 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		releasegraphmemory(G, nodenum);
 		curMemPos = precurMem;
 		curBlk = precurblk;
-		curMemEnd = preendMem;
 		if (G != NULL){
 			free(G);
 			G = NULL;
@@ -673,23 +719,35 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		//==========================================================
 		//==============Release Used Memory  (END)================
 		//==========================================================
-		if (rFile != NULL)
-			fclose(rFile);
-		if (rfile3 != NULL)
-			fclose(rfile3);
+		
 	}
 	if (tempvalue != NULL){
         delete []tempvalue;
 		tempvalue = NULL;
 	}
-    for(i=0;i<m;i++){
-        delete[]B[i];
-        B[i]=NULL;
-    }
-	delete[]B;
-	delete[]cfilename;
-	delete[]cprefilename;
-	delete[]tempstr;
+    
+	if (B != NULL) {
+		for(i = 0;i < m;i++){
+			if (B[i] != NULL) {
+				delete[]B[i];
+				B[i] = NULL;
+			}
+		}
+		delete[]B;
+		B = NULL;
+	}
+	if (cfilename != NULL) {
+		delete[]cfilename;
+		cfilename = NULL;
+	}
+	if (cprefilename != NULL) {
+		delete[]cprefilename;
+		cprefilename = NULL;
+	}
+	if (tempstr != NULL) {
+		delete[]tempstr;
+		tempstr = NULL;
+	}
 	s.clear();
 	//s.shrink_to_fit();
 }
@@ -705,11 +763,7 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 //============================================================================================================================================
 //============================================================================================================================================
 //===========================================================================================================================================
-//============================================================================================================================================
-//============================================================================================================================================
-//===========================================================================================================================================
-//============================================================================================================================================
-//============================================================================================================================================
+
 
 //===================================================
 //Compute the BCGD Global algorithm in algorithm 1 
@@ -772,10 +826,10 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 	//=============================================================
 	//Random Initialize the Zmatrix for each time stamp (end)
 	//==============================================================
-	FILE *rfile3;
-	FILE *rfile2;
-	FILE *rfile4;
-	FILE *wfile;
+	FILE *rfile3 = NULL;
+	FILE *rfile2 = NULL;
+	FILE *rfile4 = NULL;
+	FILE *wfile = NULL;
 	double a1 = 1;
 	double a2;
 	double a;
@@ -829,7 +883,6 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
                 //remember the start position of memory block (start)/////
 				char *precurMem2 = curMemPos;
 				int precurblk2 = curBlk;
-				char* preendMem2 = curMemEnd;
                 //remember the start position of memory block (end)/////
 				gnodenum = 0;
 				memset(isseednode, 'v', sizeof(char)*nodenum);
@@ -863,7 +916,11 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 						exit(2);
 					}
 					Readsubcommunity(Zprime, gnodenum, nodenum, rfile3);
-					fclose(rfile3);
+					if (rfile3 != NULL) {
+						fclose(rfile3);
+						rfile3 = NULL;
+					}
+					
 				}
 				if (t == filenames.size() - 1){
 					Znext = Z;
@@ -883,7 +940,11 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 						exit(2);
 					}
 					Readsubcommunity(Znext, gnodenum, nodenum, rfile4);
-					fclose(rfile4);
+					if (rfile4 != NULL) {
+						fclose(rfile4);
+						rfile4 = NULL;
+					}
+					
 				}
 				Z.Gettransposesqure(B);
 				if (isauto==true)
@@ -909,7 +970,6 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
                 //reset memory position (start)///////
 				curMemPos = precurMem2;
 				curBlk = precurblk2;
-				curMemEnd = preendMem2;
                 //reset memory position (end)////////
 				if (G != NULL){
 					free(G);
@@ -930,12 +990,18 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 			//Load graph and Z matrix block by block into memory
 			//Update Z matrix                                (START)
 			//=======================================================================
-			if (wfile!=NULL)
+			if (wfile != NULL) {
 				fclose(wfile);
-			if (rFile!=NULL)
+				wfile = NULL;
+			}
+			if (rFile != NULL) {
 				fclose(rFile);
-			if (rfile2!=NULL)
+				rFile = NULL;
+			}
+			if (rfile2 != NULL) {
 				fclose(rfile2);
+				rfile2 = NULL;
+			}
 			//replace Zmatrixt with temp.txt
 			Replacefile(cfilename, "temp.txt");
 		}
@@ -949,15 +1015,32 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 		a1 = a2;
 	} while (iter<maxiter&&epsilo>0.000000001);
     releaseTempSubmemory();
-	delete[]cfilename;
-	delete[]cprefilename;
-	delete[]cnextfilename;
-    for(i=0;i<m;i++){
-        delete[]B[i];
-        B[i]=NULL;
-    }
-	delete[]B;
-	delete[]tempstr;
+	if (cfilename != NULL) {
+		delete[]cfilename;
+		cfilename = NULL;
+	}
+	if (cprefilename != NULL) {
+		delete []cprefilename;
+		cprefilename = NULL;
+	}
+	if (cnextfilename != NULL) {
+		delete[]cnextfilename;
+		cnextfilename = NULL;
+	}
+	if (B != NULL) {
+		for(i=0;i<m;i++){
+			if (B[i] != NULL) {
+				delete[]B[i];
+				B[i]=NULL;
+			}
+		}
+		delete[]B;
+		B = NULL;
+	}
+	if (tempstr != NULL) {
+		delete[]tempstr;
+		tempstr = NULL;
+	}
 }
 
 //===================================================
@@ -1012,7 +1095,7 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 	double error;
 	double preerror;
 	double epsilo;
-	FILE *rFile;
+	FILE *rFile = NULL;
     InitTempFullmemory(maxnodenum);
 	//=============================================================
 	//Random Initialize the Zmatrix for each time stamp (START)
@@ -1028,10 +1111,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 	//=============================================================
 	//Random Initialize the Zmatrix for each time stamp (end)
 	//==============================================================
-	FILE *rfile3;
-	FILE *rfile2;
-	FILE *rfile4;
-	FILE *wfile;
+	FILE *rfile3 = NULL;
+	FILE *rfile2 = NULL;
+	FILE *rfile4 = NULL;
+	FILE *wfile = NULL;
 	double a1 = 1;
 	double a2;
 	double a;
@@ -1042,7 +1125,6 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 		for (t = 0; t < (int)filenames.size(); t++){
 			char *precurMem = curMemPos;
 			int precurblk = curBlk;
-			char* preendMem = curMemEnd;
 			//==============================================
 			//load graph at time t into memory (start)
 			//=============================================
@@ -1057,7 +1139,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 				exit(2);
 			}
 			ReadGraph(G, nodenum, rFile);
-			fclose(rFile);
+			if (rFile != NULL) {
+				fclose(rFile);
+				rFile = NULL;
+			}
 			//==============================================
 			//load graph at time t into memory (end)
 			//==============================================
@@ -1092,7 +1177,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 				exit(2);
 			}
 			Readcommunity(Zprime, nodenum, rfile3);
-			fclose(rfile3);
+			if (rfile3 != NULL) {
+				fclose(rfile3);
+				rfile3 = NULL;
+			}
 			rfile4 = fopen(cnextfilename, "r");
 			rv = fscanf(rfile4, "%d\n", &nodenum);
 			if (rv != 1){
@@ -1100,7 +1188,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 				exit(2);
 			}
 			Readcommunity(Znext, nodenum, rfile4);
-			fclose(rfile4);
+			if (rfile4 != NULL) {
+				fclose(rfile4);
+				rfile4 = NULL;
+			}
 			//==============================================
 			//load community matrix Zprime into memory (start)
 			//===============================================
@@ -1118,7 +1209,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 				exit(2);
 			}
 			Readcommunity(Z, nodenum, rfile2);
-			fclose(rfile2);
+			if (rfile2 != NULL) {
+				fclose(rfile2);
+				rfile2 = NULL;
+			}
 			//==============================================
 			//load community matrix Z into memory (end)
 			//===============================================
@@ -1161,7 +1255,6 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 			//reset memory (start)/////
 			curMemPos = precurMem;
 			curBlk = precurblk;
-			curMemEnd = preendMem;
             //reset memory (end)/////
 			if (G != NULL){
 				free(G);
@@ -1173,8 +1266,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 			//==========================================================
 			//==============Release Used Memory  (END)================
 			//==========================================================
-			if (wfile != NULL)
+			if (wfile != NULL) {
 				fclose(wfile);
+				wfile = NULL;
+			}
 		}
 		if (iter == 0)
 			preerror = nodenum*filenames.size();
@@ -1186,15 +1281,32 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 		a1 = a2;
 	} while (iter<maxiter&&epsilo>0.000000001);
     releaseTempSubmemory();
-	delete[]cfilename;
-	delete[]cprefilename;
-	delete[]cnextfilename;
-    for(i=0;i<m;i++){
-        delete []B[i];
-        B[i]=NULL;
-    }
-	delete[]B;
-	delete[]tempstr;
+	if (cfilename != NULL) {
+		delete[]cfilename;
+		cfilename = NULL;
+	}
+	if (cprefilename != NULL) {
+		delete[]cprefilename;
+		cprefilename = NULL;
+	}
+	if (cnextfilename != NULL) {
+		delete[]cnextfilename;
+		cnextfilename = NULL;
+	}
+	if (B != NULL) {
+		for(i=0;i<m;i++){
+			if (B[i] != NULL) {
+				delete []B[i];
+				B[i] = NULL;
+			}
+		}
+		delete[]B;
+		B = NULL;
+	}
+	if (tempstr != NULL) {
+		delete[]tempstr;
+		tempstr = NULL;
+	}
 }
 
 //===================================================

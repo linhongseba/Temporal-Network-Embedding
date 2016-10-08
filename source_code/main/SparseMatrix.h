@@ -142,7 +142,7 @@ void SparseMatrix::Initrowmemory(int r, int dv){
 		matrix[r].weight=NULL;
 		matrix[r].size=0;
 	}else{
-		if(sizeof(double)*dv>=BLK_SZ2){
+		if(sizeof(double)*dv>=BLK_SZ){
 			matrix[r].idx=(int*)malloc(sizeof(int)*dv);
 			matrix[r].weight=(double*)malloc(sizeof(double)*dv);
 			if (matrix[r].idx==NULL||matrix[r].weight==NULL){
@@ -396,7 +396,6 @@ void SparseMatrix::Rownorm2(int r){
 void SparseMatrix::Shrinkrow(int r){
 	char *precurMem = curMemPos;
 	int precurblk = curBlk;
-	char* preendMem = curMemEnd;
 	allocatetmpmemory(sizeof(double)*m*2);
 	int *tempidx = (int*)curMemPos;
 	curMemPos += (sizeof(int)*m);
@@ -417,7 +416,6 @@ void SparseMatrix::Shrinkrow(int r){
 	}
 	curMemPos = precurMem;
 	curBlk = precurblk;
-	curMemEnd = preendMem;
 }
 /*
 Save the sparse matrix representation of node-community matrix into file in disk
