@@ -133,7 +133,8 @@ Note that the node_id is within the range [0,n-1], where n is number of nodes, a
    
    To facilitate the usage of the code, we provide a set of format script that transforms different graph formats into input formats of program:
    
-   ### edge2wstandard
+### edge2wstandard
+   
    Transforms the edge format into the input weighted standard format of program
    
    For the edge format， each line encodes an edge of graph with format:
@@ -145,7 +146,7 @@ Note that the node_id is within the range [0,n-1], where n is number of nodes, a
    Usage: edge2wstandard [edgegraphfile] [number_of_nodes]
    
    
-   ### matlab2wstandard
+### matlab2wstandard
    
    Transforms the matlab format into the input weighted standard format of program
    
@@ -157,7 +158,7 @@ Note that the node_id is within the range [0,n-1], where n is number of nodes, a
    
    Usage: matlab2wstandard [edgegraphfile] [number_of_nodes]
    
-   ### TSV2wstandard
+### TSV2wstandard
    
    Transforms the TSV format into the input weighted standard format of program
    
