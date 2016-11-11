@@ -175,8 +175,9 @@ Assume that we have 31 documents located in a directory "document".
 
      1. we need to go to the directory of /source_code/document2vector/src, using another Java IDE (e.g., eclipse, Neatbean) to compile the source code and generate a jar file (e.g., D2V.jar). Here we require two libraries: lucene-core, kstem.
      
-     2. run the Matrix class with the parameter directory name of documents, in this example,
-     ``java -cp D2V.jar process/Matrix "document" ``
+     2. run the Matrix class with the parameter directory name of documents and prun frequence threshold, in this example,
+     ``java -cp D2V.jar process/Matrix "document" 2``
+     this will prune the word with frequence less than or equal to 2 
      After running this script, it will automatically generate two outputs: words.txt, and Doc2Word.txt
      In the Doc2Word.txt (a bipartite graph between Documents and words), each line is a weighted edge between a document and a word, using the TSV format
      An example of Doc2Word.txt can be found [here](https://github.com/linhongseba/Temporal-Network-Embedding/blob/master/source_code/document2vector/Doc2word.txt)
