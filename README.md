@@ -172,30 +172,43 @@ Note that the node_id is within the range [0,n-1], where n is number of nodes, a
 Here we will walk through an example of applying the temporal network embedding to learn the vector represetation for both documents and workds simultaneously.
 
 Assume that we have 31 documents located in a directory "document".
+
      1. we need to go to the directory of /source_code/document2vector/src, using another Java IDE (e.g., eclipse, Neatbean) to compile the source code and generate a jar file (e.g., D2V.jar). Here we require two libraries: lucene-core, kstem.
+     
      2. run the Matrix class with the parameter directory name of documents, in this example,
      ``java -cp D2V.jar process/Matrix "document" ``
      After running this script, it will automatically generate two outputs: words.txt, and Doc2Word.txt
      In the Doc2Word.txt (a bipartite graph between Documents and words), each line is a weighted edge between a document and a word, using the TSV format
      An example of Doc2Word.txt can be found [here](https://github.com/linhongseba/Temporal-Network-Embedding/blob/master/source_code/document2vector/Doc2word.txt)
      In the words.txt, each line is the word integer id and a word string, separated by tab. An example of words.txt can be found [here](https://github.com/linhongseba/Temporal-Network-Embedding/blob/master/source_code/document2vector/words.txt)
+     
      3. run the format script:
       ``TSV2wstandard Doc2Word.txt #nodes``
       where #nodes is equal to number of documents plus number of words
       After running the format scrript, it will generate the a new bipartite graph file with name " Doc2Word.txt_new.txt"
+      
      4. run the embedding following the instruction specified in Section [Usage](##Usage)
+     
         After running the embedding, it will generate the vector representation matrix for words and documents.
         An example of 20-dimension embedding is shown in [Zmatrix0](https://github.com/linhongseba/Temporal-Network-Embedding/blob/master/source_code/document2vector/Zmatrix0), while another example of 50-dimension embedding is shown in [50Zmatrix0](https://github.com/linhongseba/Temporal-Network-Embedding/blob/master/source_code/document2vector/50Zmatrix0).
+        
      5. Anaysis using embedding (e.g., clustering/classifying documents)
         Here we provide an example of printing the top-k words of each embedding dimension, like topic modeing
         run the following script:
          ``java -jar D2V.jar process/ReadTopwords [K] [D] [#doc] [#words] [word-file] [embed-file]``
-         Here K (integer): is the top K words to be printed for each dimension
+         Here 
+              K (integer): is the top K words to be printed for each dimension
+         
               D (integer): number of embedding dimensions
+              
               #doc (integer): number of documents
+              
               #words (integer: number of words
+              
               word-file (string): the filename of words (e.g., words.txt)
+              
               embed-file (string); the filenmae of embedding results (e.g., Zmatrix0)
+              
          The output is the top-K words for each dimension per line
          
               
