@@ -98,12 +98,16 @@ public class Matrix {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Usage: [dirname]");
+            System.out.println("Usage: [dirname] [pruned frequency (option)");
             System.exit(2);
         }
         ParseJson myparser = new ParseJson();
         myparser.readdir(args[0]);
-        myparser.prune(20);
+        int freq = 20;
+        if (args.length >1) {
+            freq = Integer.parseInt(args[1]);
+        }
+        myparser.prune(freq);
         Matrix input = new Matrix(myparser.getMaxtf());
         input.InitDict(myparser.getwords(),myparser.getDF(),myparser.getWordsIndex());
         input.readdir(args[0]);
