@@ -132,6 +132,11 @@ inline void InitTempFullmemory(int maxnodenum){
 }
 //check whether tmpblock can allocate a memory block with length size
 void inline allocatetmpmemory(unsigned int size){
+		if (size > BLK_SZ) {
+			printf("system is unable to allocate memory greater than BLK_SZ= %d. (Asked for: %d)", BLK_SZ, size);
+			exit(2);
+		}
+
 		if(size>=(size_t)(curMemEnd - curMemPos)||(curMemPos==NULL)||(curMemEnd - curMemPos)>BLK_SZ){//free mem in cur block is not enough
 			if(curBlk < endBlk){
 				//we have already allocated free blocks
@@ -200,6 +205,7 @@ inline void insert(Row &rowvector, int pos, int index, double v, int m){
         }
         rowvector.weight = newweight;
         rowvector.idx = newidx;
+
     }
     int k = 0;
     for (k = rowvector.clength; k > pos; k--){
@@ -246,6 +252,7 @@ inline void insert(Row &rowvector, int pos, int index, double v){
 				rowvector.size += 10;
 				unsigned int mysize = sizeof(double)*rowvector.size;
 				mysize += (sizeof(double)*rowvector.size);
+
 				allocatetmpmemory(mysize);
 				double *newweight = (double*)curMemPos;
 				curMemPos += (sizeof(double)*rowvector.size);
@@ -277,10 +284,11 @@ copy value from src to dest
 inline void copyRow(Row &dest, Row &src){
 	dest.size = src.size;
 	dest.clength = src.clength;
-	if (sizeof(double)*dest.size >= BLK_SZ2){
+
+	if (sizeof(double)*dest.size + sizeof(int)*dest.size >= BLK_SZ2){
 		dest.weight = (double*)malloc(sizeof(double)*dest.size);
 		dest.idx = (int*)malloc(sizeof(int)*dest.size);
-		if (dest.weight == NULL&&dest.idx == NULL){
+		if (dest.weight == NULL || dest.idx == NULL){
 			printf("system could not allocate more memory\n");
 			exit(2);
 		}
@@ -293,6 +301,7 @@ inline void copyRow(Row &dest, Row &src){
 		dest.weight = (double*)curMemPos;
 		curMemPos += (sizeof(double)*dest.size);
 	}
+
 	for (int i = 0; i < dest.clength; i++){
 		dest.weight[i] = src.weight[i];
 		dest.idx[i] = src.idx[i];

@@ -151,7 +151,8 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 		memset(node2subidx, -1, sizeof(int)*nodenum);
 		while (1){
 			//remember where we are in memory usage (START)
-			char *precurMem2 = curMemPos;
+			char *precurMem2Start = curMemPos;
+			char *precurMem2End = curMemEnd;
 			int precurblk2 = curBlk;
 			//remember where we are in memory usage (END)
 			gnodenum = 0;
@@ -203,8 +204,10 @@ inline void BCGDLocalSparsefaster(int m, vector<char *> &filenames, double lambd
 			Zprime.clear();
 			releasegraphmemory(G, gnodenum);
 			Z.clear();
-			curMemPos = precurMem2;
+			curMemPos = precurMem2Start;
+			curMemEnd = precurMem2End;
 			curBlk = precurblk2;
+
 			if (G != NULL){
 				free(G);
 				G = NULL;
@@ -393,7 +396,8 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 			error = 0;
 			while (1){
 				//remember where we are in memory usage (START)
-				char *precurMem2 = curMemPos;
+				char *precurMem2Start = curMemPos;
+				char *precurMem2End = curMemEnd;
 				int precurblk2 = curBlk;
 				//remember where we are in memory usage (END)
 				gnodenum = 0;
@@ -450,8 +454,10 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 				//==========================================================
 				releasegraphmemory(G, gnodenum);
 				Z.clear();
-				curMemPos = precurMem2;
+				curMemPos = precurMem2Start;
+				curMemPos = precurMem2End;
 				curBlk = precurblk2;
+
 				if (G != NULL){
 					free(G);
 					G = NULL;
@@ -595,7 +601,8 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		iter = 0;
 		error = 0;
 		a1 = 1;
-		char *precurMem = curMemPos;
+		char *precurMemStart = curMemPos;
+		char *precurMemEnd = curMemEnd;
 		int precurblk = curBlk;
 		//============================================
 		//=====Open graph file to read (START)
@@ -708,8 +715,10 @@ inline void BCGDLocalFull(int m, vector<char *> &filenames, double lambda, strin
 		Z.clear();
 		Zprime.clear();
 		releasegraphmemory(G, nodenum);
-		curMemPos = precurMem;
+		curMemPos = precurMemStart;
+		curMemEnd = precurMemEnd;
 		curBlk = precurblk;
+
 		if (G != NULL){
 			free(G);
 			G = NULL;
@@ -881,7 +890,8 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 			//=======================================================================
 			while (1){
                 //remember the start position of memory block (start)/////
-				char *precurMem2 = curMemPos;
+				char *precurMem2Start = curMemPos;
+				char *precurMem2End = curMemEnd;
 				int precurblk2 = curBlk;
                 //remember the start position of memory block (end)/////
 				gnodenum = 0;
@@ -968,8 +978,10 @@ inline void BCGDGlobalSparse(int m, vector<char *> &filenames, double lambda, do
 				Z.clear();
                 Znext.clear();
                 //reset memory position (start)///////
-				curMemPos = precurMem2;
+				curMemPos = precurMem2Start;
+				curMemEnd = precurMem2End;
 				curBlk = precurblk2;
+
                 //reset memory position (end)////////
 				if (G != NULL){
 					free(G);
@@ -1123,7 +1135,8 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 		a2 = (1 + sqrt(4 * a1*a1 + 1)) / 2;
 		a = (a2 + a1 - 1) / a2;
 		for (t = 0; t < (int)filenames.size(); t++){
-			char *precurMem = curMemPos;
+			char *precurMemStart = curMemPos;
+			char *precurMemEnd = curMemEnd;
 			int precurblk = curBlk;
 			//==============================================
 			//load graph at time t into memory (start)
@@ -1253,8 +1266,10 @@ inline void BCGDGlobalFull (int m, vector<char *> &filenames, double lambda,stri
 			Z.clear();
             Znext.clear();
 			//reset memory (start)/////
-			curMemPos = precurMem;
+			curMemPos = precurMemStart;
+			curMemEnd = precurMemEnd;
 			curBlk = precurblk;
+
             //reset memory (end)/////
 			if (G != NULL){
 				free(G);

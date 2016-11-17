@@ -394,11 +394,15 @@ void SparseMatrix::Rownorm2(int r){
 	}
 }
 void SparseMatrix::Shrinkrow(int r){
-	char *precurMem = curMemPos;
+	char *precurMemStart = curMemPos;
+	char *precurMemEnd = curMemEnd;
 	int precurblk = curBlk;
+
 	allocatetmpmemory(sizeof(double)*m*2);
+
 	int *tempidx = (int*)curMemPos;
 	curMemPos += (sizeof(int)*m);
+
 	double *tempweight = (double*)curMemPos;
 	curMemPos += (sizeof(double)*m);
 	int l = 0;
@@ -414,7 +418,8 @@ void SparseMatrix::Shrinkrow(int r){
 		matrix[r].weight[j] = tempweight[j];
 		matrix[r].idx[j] = tempidx[j];
 	}
-	curMemPos = precurMem;
+	curMemPos = precurMemStart;
+	curMemEnd = precurMemEnd;
 	curBlk = precurblk;
 }
 /*
