@@ -4,6 +4,8 @@
 #include"gradiantmethod.h"
 #include"dirent.h"
 #include"IncrementalBCGD.h"
+#include <algorithm>
+
 
 void exit_with_help(char *pname){
 	printf("Usage: %s graphdir [option]\n",pname);
@@ -21,6 +23,9 @@ void exit_with_help(char *pname){
 	printf("-d : delta value (default zeta*2/k\n");
 	exit(1);
 }
+
+bool custom_lexicographical_compare(const char *c1, const char *c2) { return strcmp(c1, c2) < 0; }
+
 int main(int argc, char *argv[]){
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	srand((unsigned)time(NULL));
@@ -132,6 +137,10 @@ int main(int argc, char *argv[]){
 		perror ("could not open directory");
 		return EXIT_FAILURE;
 	}
+
+	// Need to sort filenames array
+	std::sort(filenames.begin(), filenames.end(), custom_lexicographical_compare);
+
 	int maxnodenum = Getmaxnodenumber(filenames);
 	double lowmemory = sizeof(Node)*maxnodenum;
 	lowmemory += sizeof(Row)*maxnodenum;
