@@ -1,31 +1,48 @@
+/*
+ * Runtimecounter.h
+ *
+ *      Author: linhong zhu (linhong.seba.zhu@gmail.com)
+ */
+
 #ifndef Runtimecounter_h_
 #define Runtimecounter_h_
-#include"time.h"
-#include"windows.h"
+#include <sys/time.h>
+#include <stdlib.h>
+
+/*struct timevalue{
+long    tv_sec;         // seconds
+long    tv_usec;        // microseconds
+};
+
+struct timezone{
+int     tz_minuteswest; // minutes W of Greenwich
+int     tz_dsttime;     // type of dst correction
+};*/
 class Runtimecounter{
+public: //timezone tz;
+        timeval t1;
+        timeval t2;
 public:
-	LARGE_INTEGER t1, t2, tc;
 	Runtimecounter();
-	~Runtimecounter();
 	void start();
 	void stop();
-	double GetRuntime();
+	float GetRuntime();
+    float GetRuntimeusr();
 
 };
 
 Runtimecounter::Runtimecounter(){
-	QueryPerformanceFrequency(&tc); 
 }
-Runtimecounter::~Runtimecounter(){
-}
+
 void Runtimecounter::start(){
-	QueryPerformanceCounter(&t1);
+    gettimeofday(&this->t1, NULL);
 }
 void Runtimecounter::stop(){
-	QueryPerformanceCounter(&t2);
+    gettimeofday(&this->t2, NULL);
 }
-double Runtimecounter::GetRuntime(){
-	double t=(double)(t2.QuadPart-t1.QuadPart)*1000/(double)tc.QuadPart;
+float Runtimecounter::GetRuntime(){
+	float t=(float)(t2.tv_sec-t1.tv_sec)*1.0+(float)(t2.tv_usec-t1.tv_usec)/1000000.0;
 	return t;
 }
+
 #endif
