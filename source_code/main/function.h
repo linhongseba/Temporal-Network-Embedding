@@ -96,10 +96,10 @@ double delta;
 
 
 struct Node{
-	int deg;//degree
+	int deg;// degree
 	double *weight;//its weighted adjacency lists
-	int vid;//id of node
-	int *nbv;//its adjacency lists
+	int vid;// id of node
+	int *nbv;// its adjacency lists
 	//note that size of allocated memory=degree
 };
 
@@ -363,6 +363,51 @@ void GraphNorm(Node *&G, int N){
 			}
 		}
 	}
+}
+
+vector<string> getfilenames(char* graphfile) {
+	DIR *dir=NULL;
+	struct dirent *ent;
+	vector<string> filenames;
+	filenames.reserve(20);
+	fstream fin;
+	fin.open(graphfile);
+	if ((dir = opendir (graphfile)) != NULL) {
+		/* print all the files and directories within directory */
+		while ((ent = readdir (dir)) != NULL) {
+			if (ent->d_name[0] != '.'){
+				char * name = new char[4096];
+				strcpy(name, graphfile);
+				strcat(name, "/");
+				strcat(name, ent->d_name);
+				string filename(name);
+				filenames.push_back(filename);
+			}
+		}
+		closedir (dir);
+	} else if (fin.is_open()) {
+		string filename(graphfile);
+		cout << "open " << filename <<endl;
+		filenames.push_back(filename);
+		fin.close();
+	} else {
+		/* could not open directory */
+		perror ("could not open directory");
+		exit(EXIT_FAILURE);
+	}
+	return filenames;
+}
+
+vector<string> getTokens(string s, string delimiter) {
+	vector<string> tokens;
+	size_t pos = 0;
+	while ((pos = s.find(delimiter)) != std::string::npos) {
+		string token = s.substr(0, pos);
+		tokens.push_back(token);
+		s.erase(0, pos + delimiter.length());
+	}
+	tokens.push_back(s);
+	return tokens;
 }
 
 
