@@ -70,7 +70,6 @@ void nodeMapper::addToMap(string node, string type) {
 void nodeMapper::constructMap(string filename) {
 	ifstream fin(filename);
 	if (!fin.good()) {
-		cout << "debug " << endl;
 		return;
 	} else {
 		string source;
@@ -79,13 +78,9 @@ void nodeMapper::constructMap(string filename) {
 		string target_type;
 		double weight;
 		string strLine;
-		cout << "debug " << endl;
 		int linenum = 0;
 		while (!fin.eof()) {
 			getline(fin, strLine);
-			if (linenum %10000 == 0) {
-				cout << linenum << "\t" << strLine <<endl;
-			}
 			vector<string> tokens = getTokens(strLine, "\t");
 			if (tokens.size() < 4) {
 				continue;
@@ -136,6 +131,9 @@ void nodeMapper::writeName(const char*mapfilename) {
 		fout << entry.first << "\t" << entry.second + pinNum + queryNum <<endl;
 	}
 	fout.close();
+	cout << "pinNum" << pinNum << endl;
+	cout << "queryNum" << queryNum << endl;
+	cout << "termNum" << termNum << endl;
 }
 
 long nodeMapper::getTermID(string term) {
@@ -193,11 +191,6 @@ void nodeMapper::constructEdge(string filename, ofstream &fout) {
 		while (!fin.eof()) {
 			getline(fin, strLine);
 			vector<string> tokens = getTokens(strLine, "\t");
-			if (linenum %10000 == 0) {
-				cout << linenum << "\t" << tokens.size() << endl;
-				cout << tokens[3] << endl;
-				cout << strLine <<endl;
-			}
 			if (tokens.size() < 5) {
 				linenum ++;
 				continue;
