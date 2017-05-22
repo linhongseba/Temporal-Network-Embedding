@@ -444,8 +444,13 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 						updateZauto(Z, G, i, lambda, B, Zprime.matrix[i], 1.0);
 					else
 						updateZauto(Z, G, i, lambda, B, Zprime.matrix[i], a);
+					if (iter % printstep == 0 && i % 10000 == 0) {
+						printf("now updating node %d in iter %d\n", i, iter);
+					}
 				}
 				////////////////////////////////////////////////////////////
+				if (iter%printstep == 0)
+					printf("finish updating %d\n", iter);
 				Zprime.clear();
 				Z.Writetofile(wfile, G);
 				error += Fnormfast(G, Z, gnodenum);
