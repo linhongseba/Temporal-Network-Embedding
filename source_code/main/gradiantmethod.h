@@ -449,8 +449,6 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 					}
 				}
 				////////////////////////////////////////////////////////////
-				if (iter%printstep == 0)
-					printf("finish updating %d\n", iter);
 				Zprime.clear();
 				Z.Writetofile(wfile, G);
 				error += Fnormfast(G, Z, gnodenum);
@@ -460,15 +458,16 @@ inline void BCGDLocalSparse(int m, vector<char *> &filenames, double lambda, dou
 				releasegraphmemory(G, gnodenum);
 				Z.clear();
 				curMemPos = precurMem2Start;
-				curMemPos = precurMem2End;
+				curMemEnd = precurMem2End;
 				curBlk = precurblk2;
-
 				if (G != NULL){
 					free(G);
 					G = NULL;
 				}
 				Zprime.deletemem();
 				Z.deletemem();
+				if (iter%printstep == 0)
+					printf("finish updating %d\n", iter);
 				//_CrtDumpMemoryLeaks();
 				//==========================================================
 				//==============Release Used Memory  (END)================
