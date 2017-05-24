@@ -50,8 +50,8 @@ public:
 		int idx;
 		string s;
 		while (infile.good()) {
-			infile >> idx;
 			infile >> s;
+			infile >> idx;
 			labels[s] = idx;
 			nodelabels[idx] = s;
 		}
@@ -95,9 +95,6 @@ public:
 				}
 				Readcommunity(Z, productnum, rfile);
 				for (int j = 0; j < productnum; j++) {
-					if (nodelabels[j].find_first_of("CVE") >= 0 && nodelabels[j].compare("CVE-2015") < 0) {
-						continue;
-					}
 					if (j != idx) {
 						double sim = Z.Rowdotproduct2(idx, j);
 						product a(j, sim);
