@@ -78,7 +78,6 @@ public:
 	void computesim(string productname) {
 		if (this->labels.find(productname) == labels.end()) {
 			cout << "the product does not exit in our data" << endl;
-			cout << " please check your input (format google:chrome)" << endl;
 			exit(4);
 		}
 		else {

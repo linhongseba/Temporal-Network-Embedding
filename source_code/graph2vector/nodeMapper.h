@@ -122,13 +122,13 @@ void nodeMapper::writeGraph(char *graphfile, const char *outputfile) {
 void nodeMapper::writeName(const char*mapfilename) {
 	ofstream fout(mapfilename);
 	for (auto& entry: pinmap) {
-		fout << entry.first << "\t" << entry.second << endl;
+		fout << entry.first << "\01" << entry.second << endl;
 	}
 	for (auto& entry: querymap) {
-		fout << entry.first << "\t" << entry.second + pinNum << endl;
+		fout << entry.first << "\01" << entry.second + pinNum << endl;
 	}
 	for (auto& entry: termmap) {
-		fout << entry.first << "\t" << entry.second + pinNum + queryNum <<endl;
+		fout << entry.first << "\01" << entry.second + pinNum + queryNum <<endl;
 	}
 	fout.close();
 	cout << "pinNum" << pinNum << endl;
