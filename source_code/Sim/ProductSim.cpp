@@ -49,9 +49,12 @@ public:
 		}
 		int idx;
 		string s;
-		while (infile.good()) {
-			infile >> s;
-			infile >> idx;
+		string strLine;
+		while (!fin.eof()) {
+			getline(fin, strLine);
+			std::size_t found = str.find_last_of("\t");
+			s =  str.substr(0,found);
+			idx = stoi(str.substr(found + 1));
 			labels[s] = idx;
 			nodelabels[idx] = s;
 		}
