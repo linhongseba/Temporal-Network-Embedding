@@ -53,8 +53,8 @@ public:
 		while (!infile.eof()) {
 			getline(infile, strLine);
 			std::size_t found = strLine.find_last_of("\t");
-			s =  str.substr(0,found);
-			idx = stoi(str.substr(found + 1));
+			s =  strLine.substr(0,found);
+			idx = stoi(strLine.substr(found + 1));
 			labels[s] = idx;
 			nodelabels[idx] = s;
 		}
