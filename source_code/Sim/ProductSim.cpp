@@ -50,9 +50,9 @@ public:
 		int idx;
 		string s;
 		string strLine;
-		while (!fin.eof()) {
-			getline(fin, strLine);
-			std::size_t found = str.find_last_of("\t");
+		while (!infile.eof()) {
+			getline(infile, strLine);
+			std::size_t found = strLine.find_last_of("\t");
 			s =  str.substr(0,found);
 			idx = stoi(str.substr(found + 1));
 			labels[s] = idx;
