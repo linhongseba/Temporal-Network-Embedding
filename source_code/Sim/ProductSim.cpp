@@ -23,7 +23,7 @@ struct compare{
 class ProductSim{
 	unordered_map<string, int> labels;
 	priority_queue<product, vector<product>, compare> Q;
-	int K = 20;
+	int K = 5;
 	vector<string> nodelabels;
 	DIR *dir = NULL;
 	struct dirent *ent;
@@ -50,11 +50,24 @@ public:
 		int idx;
 		string s;
 		string strLine;
-		while (!infile.eof()) {
+		while (infile.good()) {
 			getline(infile, strLine);
-			std::size_t found = strLine.find_last_of("\t");
+			size_t found = strLine.find_last_of("\01");
+			if (found <= 0) {
+				continue;
+			}
 			s =  strLine.substr(0,found);
-			idx = stoi(strLine.substr(found + 1));
+			string v = strLine.substr(found + 1);
+			if (v.length() == 0) {
+				continue;
+			}
+			try{
+				idx = stoi(v);
+			} catch(const std::invalid_argument& e ) {
+				cout << v;
+				throw e;
+				continue;
+			}
 			labels[s] = idx;
 			nodelabels[idx] = s;
 		}
@@ -78,12 +91,13 @@ public:
 		}
 	}
 
-	void computesim(string productname) {
+	void computesim(string productname, int topK) {
 		if (this->labels.find(productname) == labels.end()) {
 			cout << "the product does not exit in our data" << endl;
 			exit(4);
 		}
 		else {
+			K = topK;
 			int idx = labels[productname];
 			SparseMatrix Z;
 			Z.Initmemory(productnum);
@@ -125,9 +139,9 @@ public:
 };
 
 int main (int argc, char *argv[]) {
-	if (argc < 1) {
+	if (argc < 5) {
 		cout << "Usage " << argv[0];
-		cout << "[#product] [embedding-file-name] [node-label-file-name] [product-name]" << endl;
+		cout << "[#product] [embedding-file-name] [node-label-file-name] [product-name] [K]" << endl;
 		exit(4);
 	}
 	int v = atoi(argv[1]);
@@ -135,12 +149,16 @@ int main (int argc, char *argv[]) {
 	string dirname(argv[2]);
 	string labelname(argv[3]);
 	string productname(argv[4]);
+	int topK = 10;
+	if (argc >= 5) {
+		topK = atoi(argv[5]);
+	}
 	Initmemory();
 	InitIOmemory();
 	filebuffer = new char[BYTE_TO_READ];
 	a.listfileinDir(dirname);
 	a.readNodeLabel(labelname);
-	a.computesim(productname);
+	a.computesim(productname, topK);
 	releaseIOmemory();
 	releaseblockmemory();
 	return 0;
