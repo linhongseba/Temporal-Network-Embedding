@@ -284,8 +284,12 @@ copy value from src to dest
 inline void copyRow(Row &dest, Row &src){
 	dest.size = src.size;
 	dest.clength = src.clength;
-
-	if (sizeof(double)*dest.size + sizeof(int)*dest.size >= BLK_SZ2){
+	if (src.size == 0 || src.weight == NULL || src.idx == NULL) {
+		dest.weight = NULL;
+		dest.idx = NULL;
+		return;
+	}
+	if (sizeof(double)*dest.size + sizeof(int)*dest.size >= BLK_SZ){
 		dest.weight = (double*)malloc(sizeof(double)*dest.size);
 		dest.idx = (int*)malloc(sizeof(int)*dest.size);
 		if (dest.weight == NULL || dest.idx == NULL){
@@ -294,14 +298,13 @@ inline void copyRow(Row &dest, Row &src){
 		}
 	}
 	else{
-		allocatetmpmemory(sizeof(int)*dest.size);
+		allocatetmpmemory(sizeof(double)*dest.size);
 		dest.idx = (int *)curMemPos;
-		curMemPos+= (sizeof(int)*dest.size);
+		curMemPos+= (sizeof(double)*dest.size);
 		allocatetmpmemory(sizeof(double)*dest.size);
 		dest.weight = (double*)curMemPos;
 		curMemPos += (sizeof(double)*dest.size);
 	}
-
 	for (int i = 0; i < dest.clength; i++){
 		dest.weight[i] = src.weight[i];
 		dest.idx[i] = src.idx[i];

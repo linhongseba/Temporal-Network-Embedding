@@ -150,9 +150,9 @@ void SparseMatrix::Initrowmemory(int r, int dv){
 				exit(0);
 			}
 		}else{
-			allocatetmpmemory(sizeof(int)*dv);
+			allocatetmpmemory(sizeof(double)*dv);
 			matrix[r].idx=(int *)curMemPos;
-			curMemPos+=(sizeof(int)*dv);
+			curMemPos += (sizeof(double)*dv);
 			allocatetmpmemory(sizeof(double)*dv);
 			matrix[r].weight=(double*)curMemPos;
 			curMemPos+=(sizeof(double)*dv);
@@ -221,15 +221,17 @@ void SparseMatrix::Gettransposesqure(double **&B){
 	int bj;
 	for (i = 0; i < m; i++){
 		for (j = 0; j < m; j++){
-			B[i][j] = 0;
+			B[i][j] = 0.0;
 		}
 	}
 	for (i = 0; i < n; i++){
-		for (j = 0; j < matrix[i].clength; j++){
-			bi = matrix[i].idx[j];
-			for (k = 0; k < matrix[i].clength; k++){
-				bj = matrix[i].idx[k];
-				B[bi][bj] += matrix[i].weight[j] * matrix[i].weight[k];
+		if (matrix[i].size != 0) {
+			for (j = 0; j < matrix[i].clength; j++){
+				bi = matrix[i].idx[j];
+				for (k = 0; k < matrix[i].clength; k++){
+					bj = matrix[i].idx[k];
+					B[bi][bj] += matrix[i].weight[j] * matrix[i].weight[k];
+				}
 			}
 		}
 	}

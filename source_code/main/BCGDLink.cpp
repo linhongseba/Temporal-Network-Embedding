@@ -1,11 +1,11 @@
 //#include <crtdbg.h>
 #define _CRT_SECURE_NO_WARNINGS
 //#define _CRTDBG_MAP_ALLOC
-#include"gradiantmethod.h"
-#include"dirent.h"
-#include"IncrementalBCGD.h"
+#include "gradiantmethod.h"
+#include "dirent.h"
+#include "IncrementalBCGD.h"
+#include "PreBCGD.h"
 #include <algorithm>
-
 
 void exit_with_help(char *pname){
 	printf("Usage: %s graphdir [option]\n",pname);
@@ -111,49 +111,50 @@ int main(int argc, char *argv[]){
 	////////////////////////////////////////////////////////////
 	///////////initializing IO memory block (START)/////////////
 	///////////////////////////////////////////////////////////
-
 	DIR *dir=NULL;
 	struct dirent *ent;
 	vector<char *> filenames;
 	filenames.reserve(20);
-	if ((dir = opendir (argv[1])) != NULL) {
-		/* print all the files and directories within directory */
-		while ((ent = readdir (dir)) != NULL) {
-			if (ent->d_name[0] != '.'){
-				//printf("%s\n", ent->d_name);
-				allocatetmpmemory(sizeof(char) * 2048);
-				char *name =(char*)curMemPos;
-				curMemPos +=( sizeof(char) * 2048);
-				strcpy(name, argv[1]);
-				strcat(name, "/");
-				strcat(name, ent->d_name);
-				//printf("%s\n", name);
-				filenames.push_back(name);
-			}
-		}
-		closedir (dir);
-	} else {
-		/* could not open directory */
-		perror ("could not open directory");
-		return EXIT_FAILURE;
-	}
-
-	// Need to sort filenames array
-	std::sort(filenames.begin(), filenames.end(), custom_lexicographical_compare);
-
-	int maxnodenum = Getmaxnodenumber(filenames);
-	double lowmemory = sizeof(Node)*maxnodenum;
-	lowmemory += sizeof(Row)*maxnodenum;
-	lowmemory += (sizeof(double) + sizeof(int))*maxnodenum*30;
-	lowmemory += (sizeof(double) + sizeof(int))*maxnodenum *m*2;
-	lowmemory /= 1024;
+	int maxnodenum;
 	bool inmemory = false;
-	if (lowmemory < 0.5*memorybound){
-		inmemory = true;
+	if (type != 9) {
+		if ((dir = opendir (argv[1])) != NULL) {
+			/* print all the files and directories within directory */
+			while ((ent = readdir (dir)) != NULL) {
+				if (ent->d_name[0] != '.'){
+					//printf("%s\n", ent->d_name);
+					allocatetmpmemory(sizeof(char) * 2048);
+					char *name =(char*)curMemPos;
+					curMemPos +=( sizeof(char) * 2048);
+					strcpy(name, argv[1]);
+					strcat(name, "/");
+					strcat(name, ent->d_name);
+					//printf("%s\n", name);
+					filenames.push_back(name);
+				}
+			}
+			closedir (dir);
+		} else {
+			/* could not open directory */
+			perror ("could not open directory");
+			return EXIT_FAILURE;
+		}
+		// Need to sort filenames array
+		std::sort(filenames.begin(), filenames.end(), custom_lexicographical_compare);
+		maxnodenum= Getmaxnodenumber(filenames);
+		double lowmemory = sizeof(Node)*maxnodenum;
+		lowmemory += sizeof(Row)*maxnodenum;
+		lowmemory += (sizeof(double) + sizeof(int))*maxnodenum*30;
+		lowmemory += (sizeof(double) + sizeof(int))*maxnodenum *m*2;
+		lowmemory /= 1024;
+		if (lowmemory < 0.5*memorybound){
+			inmemory = true;
+		}
+		else
+			inmemory = false;
+		cout << "In memory " << inmemory << endl;
 	}
-	else
-		inmemory = false;
-	cout << "In memory " << inmemory << endl;
+	
 	switch (type){
 	case 1:
 		if (inmemory == false)
@@ -196,6 +197,9 @@ int main(int argc, char *argv[]){
 		break;
 	case 8:
 		BCGDLocalSparsefaster(m, filenames, lambda, memorybound, prefix, printstep, true, maxnodenum);
+		break;
+	case 9:
+		PreBCGDLocal(m, "Zmatrix", argv[1], lambda, memorybound, prefix, printstep, true);
 		break;
 	default:
 		exit_with_help(argv[0]);
