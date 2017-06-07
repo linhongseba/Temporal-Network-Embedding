@@ -101,7 +101,6 @@ public:
 			int idx = labels[productname];
 			SparseMatrix Z;
 			Z.Initmemory(productnum);
-			Z.setcolumnnum(20);
 			FILE *rfile = NULL;
 			for (int t = 0; t < filenames.size(); t++) {
 				rfile = fopen(filenames[t].c_str(), "r");
