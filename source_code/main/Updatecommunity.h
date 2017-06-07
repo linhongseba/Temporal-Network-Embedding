@@ -694,6 +694,20 @@ inline void updateZauto(SparseMatrix &Z, Node *&G, int u, double lambda, double 
 	Z.Rownorm2(u);
 	Z.Shrinkrow(u);
 }
+
+inline void updateZ(SparseMatrix &Z, Node *&G, int u, double lambda) {
+	int i = 0;
+	int v;
+	Z.RowsumMultiply(u, 1 - alpha); //Z(u)=Z(u)+2\alpha Z(u)
+	for (i = 0; i<G[u].deg; i++){
+		v = G[u].nbv[i];
+		if (node2subidx!=NULL)
+			v = node2subidx[v];
+		Z.RowsumLeftEqual(u, v, G[u].weight[i] * alpha);
+	}//Z(u)=Z(u)+2\alpha*sum_{v}w(u,v)*Z(v)
+	//finally add alpha\lambda Zt-1(u)
+	Z.Shrinkrow(u);
+}
 //============================================================================
 //compute the Lipschitz constant (start)
 //============================================================================

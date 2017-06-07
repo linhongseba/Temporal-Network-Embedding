@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
 	filenames.reserve(20);
 	int maxnodenum;
 	bool inmemory = false;
-	if (type != 9) {
+	if (type != 9 && type != 10) {
 		if ((dir = opendir (argv[1])) != NULL) {
 			/* print all the files and directories within directory */
 			while ((ent = readdir (dir)) != NULL) {
@@ -200,6 +200,9 @@ int main(int argc, char *argv[]){
 		break;
 	case 9:
 		PreBCGDLocal(m, "Zmatrix", argv[1], lambda, memorybound, prefix, printstep, true);
+		break;
+	case 10:
+		PreBCGDLocal(m, "Zmatrix", argv[1], lambda, memorybound, prefix, printstep, false);
 		break;
 	default:
 		exit_with_help(argv[0]);

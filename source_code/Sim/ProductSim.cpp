@@ -138,7 +138,7 @@ public:
 };
 
 int main (int argc, char *argv[]) {
-	if (argc < 5) {
+	if (argc <= 5) {
 		cout << "Usage " << argv[0];
 		cout << "[#product] [embedding-file-name] [node-label-file-name] [product-name] [K]" << endl;
 		exit(4);
@@ -149,7 +149,7 @@ int main (int argc, char *argv[]) {
 	string labelname(argv[3]);
 	string productname(argv[4]);
 	int topK = 10;
-	if (argc >= 5) {
+	if (argc > 5) {
 		topK = atoi(argv[5]);
 	}
 	Initmemory();

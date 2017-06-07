@@ -117,7 +117,7 @@ inline void PreBCGDLocal(int m, char * cprefilename, char * filename, double lam
 				if (isauto == false)
 					updateZauto(Z, G, i, lambda, B, Zprime.matrix[i], 1.0);
 				else
-					updateZauto(Z, G, i, lambda, B, Zprime.matrix[i], a);
+					updateZ(Z, G, i, lambda);
 			}
 			error = Fnormfast(G, Z, gnodenum);
 			if (iter == 0)
@@ -128,7 +128,7 @@ inline void PreBCGDLocal(int m, char * cprefilename, char * filename, double lam
 			preerror = error;
 			a1 = a2;
 			iter++;
-		} while (iter < maxiter&&epsilo>0.000000001);
+		} while (iter < maxiter);
 		Z.Writetofile(wfiletemp, G);
 		//==========================================================
 		// Release Used Memory  (START)================
