@@ -100,7 +100,6 @@ public:
 			K = topK;
 			int idx = labels[productname];
 			SparseMatrix Z;
-			Z.Initmemory(productnum);
 			FILE *rfile = NULL;
 			for (int t = 0; t < filenames.size(); t++) {
 				rfile = fopen(filenames[t].c_str(), "r");
@@ -108,6 +107,8 @@ public:
 					cout << "could not open file to read" << endl;
 					exit(4);
 				}
+				int nodenum = 0;
+				fscanf(rfile, "%d\n", &nodenum);
 				Readcommunity(Z, productnum, rfile);
 				for (int j = 0; j < productnum; j++) {
 					if (j != idx) {
