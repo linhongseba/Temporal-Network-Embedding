@@ -36,7 +36,9 @@ public:
 	double Fnorm(); //return the Fnorm of Sparse matrix
 	void Rownorm1(int r); //row sum equal to one normalization for row r
 	void Rownorm2(int r); //row square sum equal to one normalization for row r
+	void RownormMax(int r); // divided each entry by the maximum of row r
 	void Writetofile(FILE *wfile, Node *&G); //save the sparse matrix into file
+	void Writetofile(FILE *wfile); //save the sparse matrix into file
 	void Multiplymatrix(int r1, double **B, double *&res); //res = Row(r1)*B, Row(r1)=1*m, B=m*m
 	void Printrow(int r);
 	void Shrinkrow(int r);
@@ -48,6 +50,7 @@ public:
 SparseMatrix::SparseMatrix(){
 	matrix=NULL;
 }
+
 SparseMatrix::SparseMatrix(const SparseMatrix &obj){
 	this->m = obj.m;
 	this->n=obj.n;
@@ -60,6 +63,7 @@ SparseMatrix::SparseMatrix(const SparseMatrix &obj){
 		copyRow(matrix[i], obj.matrix[i]);
 	}
 }
+
 SparseMatrix & SparseMatrix::operator=(const SparseMatrix & obj){
 	if (this == &obj)
 		return *this;
@@ -75,6 +79,7 @@ SparseMatrix & SparseMatrix::operator=(const SparseMatrix & obj){
 	}
 	return *this;
 }
+
 void SparseMatrix::Initmemory(int rownum){
 	n=rownum;
 	matrix=(Row*)malloc(sizeof(Row)*n);
@@ -89,8 +94,10 @@ void SparseMatrix::Initmemory(int rownum){
 		matrix[i].size=0;
 	}
 }
+
 SparseMatrix::~SparseMatrix(){
 }
+
 void SparseMatrix::clear(){
 	if (matrix != NULL){
 		for (int i = 0; i<n; i++){
@@ -111,12 +118,14 @@ void SparseMatrix::clear(){
 	this->n = 0;
 	this->m = 0;
 }
+
 void SparseMatrix::deletemem(){
 	if (matrix != NULL){
 		free(matrix);
 		matrix = NULL;
 	}
 }
+
 void SparseMatrix::Addmemory(int snum){
 	Row *tempres=(Row*)realloc(matrix,sizeof(Row)*(n+snum));
 	if(tempres==NULL){
@@ -132,6 +141,7 @@ void SparseMatrix::Addmemory(int snum){
 	}
 	n = n + snum;
 }
+
 void SparseMatrix::Initrowmemory(int r, int dv){
 	/////////////////////////////////////////////////////////////
 	//for each node v,
@@ -165,6 +175,7 @@ void SparseMatrix::Initrowmemory(int r, int dv){
 	//allocate memory space to store a row entry  (END)
 	///////////////////////////////////////////////////////////
 }
+
 //add value (index,weight) to row r
 void SparseMatrix::addelement(int r, int index,double weight){
 	int pos=matrix[r].clength;
@@ -174,7 +185,6 @@ void SparseMatrix::addelement(int r, int index,double weight){
 	matrix[r].clength=pos;
 }
 
-
 //Row[r1]=c*Row[r1];
 void SparseMatrix::RowMultiply(int r, double c){
 	int i=0;
@@ -182,6 +192,7 @@ void SparseMatrix::RowMultiply(int r, double c){
 		matrix[r].weight[i]*=c;
 	}
 }
+
 //Row[r1]=Row[r1]+c*Row[r1];
 void SparseMatrix::RowsumMultiply(int r, double c){
 	int i=0;
@@ -189,6 +200,7 @@ void SparseMatrix::RowsumMultiply(int r, double c){
 		matrix[r].weight[i]*=(1+c);
 	}
 }
+
 double SparseMatrix::Rowdotproduct(int r){
 	double result=0;
 	for(int i=0;i<matrix[r].clength;i++){
@@ -196,6 +208,7 @@ double SparseMatrix::Rowdotproduct(int r){
 	}
 	return result;
 }
+
 /*
 B m*m matric
 */
@@ -262,6 +275,7 @@ void SparseMatrix::Printrow(int r){
 		cout << matrix[r].idx[i] << "\t" << matrix[r].weight[i] << endl;
 	}
 }
+
 //Row[r1]=Row[r1]+Row[r2]*c;
 void SparseMatrix::RowsumLeftEqual(int r1,int r2, double c){
 	int i=0;
@@ -286,6 +300,7 @@ void SparseMatrix::RowsumLeftEqual(int r1,int r2, double c){
 		j++;
 	}
 }
+
 void SparseMatrix::RowsumLeftEqual(int r1,Row &entry2, double c){
 	int i=0;
 	int j=0;
@@ -339,6 +354,7 @@ void SparseMatrix::RowsumLeftEqual(int r1, double *entry,double c){
 		j++;
 	}
 }
+
 double SparseMatrix::Fnorm(){
 	double res=0;
 	for(int i=0;i<n;i++){
@@ -348,6 +364,7 @@ double SparseMatrix::Fnorm(){
 	}
 	return res;
 }
+
 void SparseMatrix::Rownorm1(int r){
 	double minvalue = 12345;
 	for (int j = 0; j < matrix[r].clength; j++){
@@ -370,6 +387,18 @@ void SparseMatrix::Rownorm1(int r){
 		}
 	}
 }
+
+void SparseMatrix::RownormMax(int r){
+	double maxvalue = 0.00000001;
+	for (int j = 0; j < matrix[r].clength; j++){
+		if (maxvalue < matrix[r].weight[j])
+			maxvalue = matrix[r].weight[j];
+	}
+	for (int j = 0; j < matrix[r].clength; j++){
+		matrix[r].weight[j] /= maxvalue;
+	}
+}
+
 void SparseMatrix::Rownorm2(int r){
 	double minvalue = 12345;
 	for (int j = 0; j < matrix[r].clength; j++){
@@ -395,6 +424,7 @@ void SparseMatrix::Rownorm2(int r){
 		}
 	}
 }
+
 void SparseMatrix::Shrinkrow(int r){
 	char *precurMemStart = curMemPos;
 	char *precurMemEnd = curMemEnd;
@@ -424,6 +454,7 @@ void SparseMatrix::Shrinkrow(int r){
 	curMemEnd = precurMemEnd;
 	curBlk = precurblk;
 }
+
 /*
 Save the sparse matrix representation of node-community matrix into file in disk
 Note that only the seed node's community representation is saved
@@ -489,6 +520,69 @@ void SparseMatrix::Writetofile(FILE *wfile, Node *&G){
 		fwrite(outputbuffer,sizeof(char),j,wfile);
 		outcurpos=outputbuffer;
 	}
+}
 
+/*
+Save the sparse matrix representation of node-community matrix into file in disk
+*/
+void SparseMatrix::Writetofile(FILE *wfile){
+	Runtimecounter IORC;
+	int j;
+	int i;
+	int d;
+	int idx;
+	double value;
+	outcurpos = outputbuffer;
+	if(wfile!=NULL){
+		for(i=0;i<n;i++){
+			if (outendpos - outcurpos <= 100) {
+				j = outcurpos - outputbuffer;
+				IORC.start();
+				fwrite(outputbuffer, sizeof(char), j, wfile);
+				IORC.stop();
+				iotime += IORC.GetRuntime();
+				outcurpos = outputbuffer;
+			}
+			j=itostring(i,outcurpos,10);
+			outcurpos += j;
+			*outcurpos = ',';
+			outcurpos++;
+			j=itostring(matrix[i].clength,outcurpos,10);
+			outcurpos += j;
+			for(d = 0; d < matrix[i].clength; d++){
+				idx=matrix[i].idx[d];
+				value=matrix[i].weight[d];
+				if (outendpos - outcurpos <= 200) {
+					j = outcurpos - outputbuffer;
+					IORC.start();
+					fwrite(outputbuffer, sizeof(char), j, wfile);
+					IORC.stop();
+					iotime += IORC.GetRuntime();
+					outcurpos = outputbuffer;
+				}
+				*outcurpos = ':';
+				outcurpos++;
+				j=itostring(idx,outcurpos,10);
+				outcurpos += j;
+				*outcurpos = ',';
+				outcurpos++;
+				j=dtostring(value,outcurpos);
+				outcurpos += j;
+			}
+			if (outendpos - outcurpos < 20){
+				j = outcurpos - outputbuffer;
+				IORC.start();
+				fwrite(outputbuffer, sizeof(char), j, wfile);
+				IORC.stop();
+				iotime += IORC.GetRuntime();
+				outcurpos = outputbuffer;
+			}
+			*outcurpos = '\n';
+			outcurpos++;
+		}
+		j=outcurpos-outputbuffer;
+		fwrite(outputbuffer,sizeof(char),j,wfile);
+		outcurpos=outputbuffer;
+	}
 }
 #endif

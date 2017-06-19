@@ -532,7 +532,7 @@ inline void Readsubcommunity(SparseMatrix &Z, int gnodenum,int nodenum,FILE *inF
 	maxidx++;
 	Z.setcolumnnum(maxidx);
 }
-inline void Readcommunity(SparseMatrix &Z, int nodenum, FILE *inFile){
+inline void Readcommunity(SparseMatrix &Z, int &nodenum, FILE *inFile){
 	Runtimecounter IORC;
 	IORC.start();
 	int i = 0;
@@ -543,6 +543,11 @@ inline void Readcommunity(SparseMatrix &Z, int nodenum, FILE *inFile){
 	int maxidx = 0;
 	int j = 0;
 	int pos = 0;
+	int rv=fscanf(inFile, "%d\n", &nodenum);
+	if (rv != 1){
+		printf("the format of file is not correct");
+		exit(2);
+	}
 	Z.Initmemory(nodenum);
 	curpos = endpos0 = inputbuffer;	//initialize the data position pointers to the start of the buffer
 	FillInputBuffer(inFile);
@@ -596,12 +601,9 @@ inline void Readcommunity(SparseMatrix &Z, int nodenum, FILE *inFile){
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////scanning the graph again to initializing the S and Splus nodes' adjacent lists(end)
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	rewind(inFile);
-	int rv=fscanf(inFile, "%d\n", &nodenum);
 	IORC.stop();
 	iotime += IORC.GetRuntime();
-	maxidx++;
-	Z.setcolumnnum(maxidx);
+	Z.setcolumnnum(maxidx + 1);
 }
 inline void Replacefile(char *destfilename, char *srcfilename){
 	FILE* source = fopen(srcfilename, "rb");
@@ -611,7 +613,7 @@ inline void Replacefile(char *destfilename, char *srcfilename){
 		// clean and more secure
 		// feof(FILE* stream) returns non-zero if the end of file indicator for stream is set
 
-		while (size = fread(filebuffer, 1, BYTE_TO_READ, source)) {
+		while ((size = fread(filebuffer, 1, BYTE_TO_READ, source))) {
 			fwrite(filebuffer, 1, size, dest);
 		}
 
@@ -725,13 +727,6 @@ inline void ReadGraph(Node *&G, int nodenum,FILE *inFile){
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////scanning the graph again to initializing the S and Splus nodes' adjacent lists(end)
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	rewind(inFile);
-	int rv=fscanf(inFile,"%d\n",&nodenum);
-	if (rv != 1){
-		printf("the format of file is not correct");
-		exit(2);
-
-	}
 	IORC.stop();
 	iotime+=IORC.GetRuntime();
 }

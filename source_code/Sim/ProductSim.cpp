@@ -107,9 +107,8 @@ public:
 					cout << "could not open file to read" << endl;
 					exit(4);
 				}
-				int nodenum = 0;
-				fscanf(rfile, "%d\n", &nodenum);
 				Readcommunity(Z, productnum, rfile);
+				cout << "finish reading the embedding"
 				for (int j = 0; j < productnum; j++) {
 					if (j != idx) {
 						double sim = Z.Rowdotproduct2(idx, j);
